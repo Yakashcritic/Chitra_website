@@ -519,6 +519,72 @@ header {
     }
 }
 
+/* --- COMPLETE MOBILE FIX (768px and below) --- */
+@media screen and (max-width: 768px) {
+    
+    /* 1. Founder Section Fix */
+    .founder-card {
+        grid-template-columns: 1fr !important; /* Image mela, text keezha */
+        gap: 30px !important;
+        padding: 20px !important;
+    }
+
+    .founder-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+    }
+
+    .founder-info {
+        text-align: center;
+    }
+
+    /* 2. Stats / Numbers Fix (25+, 500+, 100%) */
+    /* Stats-ah stacking pannaama, 2x2 grid illa single column-ah mathuvom */
+    .founder-info div[style*="display: flex"] {
+        flex-direction: column !important; /* Numbers-ah onnu keezha onnu veikkum */
+        align-items: center !important;
+        gap: 20px !important;
+    }
+
+    /* 3. Trusted By Industry Leaders Fix */
+    .client-section h2 {
+        font-size: 1.8rem !important;
+        padding: 0 10px;
+    }
+
+    /* 4. FOOTER FIX (Romba Mukkiyam) */
+    .footer-grid {
+        grid-template-columns: 1fr !important; /* Ella column-um onnu keezha onnu varum */
+        text-align: center;
+        gap: 40px !important;
+    }
+
+    .contact-item {
+        flex-direction: column !important; /* Icon mela, text keezha */
+        align-items: center !important;
+        text-align: center;
+    }
+
+    .contact-details {
+        margin-top: 10px;
+    }
+
+    /* Footer text overlap fix */
+    .footer-grid div {
+        width: 100% !important;
+    }
+
+    /* General Padding for Mobile */
+    section {
+        padding: 40px 5% !important;
+    }
+
+    /* Logo scaling for mobile */
+    .logo-text {
+        font-size: 1.2rem !important;
+    }
+}
+
 
 
     </style>
@@ -695,10 +761,10 @@ header {
             <div>
                 <div class="footer-title">Engineering Catalog</div>
                 <ul style="list-style: none; opacity: 0.7;">
-                    <li style="margin-bottom: 10px;">Metering Solutions</li>
-                    <li style="margin-bottom: 10px;">Machineries Control</li>
+                    <li style="margin-bottom: 10px;">Metering Panels</li>
+                    <li style="margin-bottom: 10px;">Machineries Panels</li>
                     <li style="margin-bottom: 10px;">APFC Panels</li>
-                    <li style="margin-bottom: 10px;">AMF Systems</li>
+                    <li style="margin-bottom: 10px;">AMF Panels</li>
                 </ul>
             </div>
             <div>
