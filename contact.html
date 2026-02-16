@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chitra Enterprises | Headquarters</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .bg-blueprint {
+            background-image: 
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .circuit-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='circuit' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0,50 Q25,25 50,50 T100,50' stroke='%232563eb' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3Cpath d='M50,0 Q75,25 50,50 T50,100' stroke='%23dc2626' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23circuit)'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+        
+        .glass-card {
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-card-highlight {
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(37, 99, 235, 0.4);
+            border-top: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 0.75rem;
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        .magnetic-btn {
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+        
+        .magnetic-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.4) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .magnetic-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .floating-label {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .floating-label input,
+        .floating-label textarea,
+        .floating-label select {
+            width: 100%;
+            padding: 1.25rem 1rem 0.5rem 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 0.5rem;
+            color: #f8fafc;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }
+        
+        .floating-label textarea {
+            min-height: 120px;
+            resize: vertical;
+            padding-top: 1.5rem;
+        }
+        
+        .floating-label label {
+            position: absolute;
+            top: 1.25rem;
+            left: 1rem;
+            color: #94a3b8;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-family: 'Inter', sans-serif;
+            transform-origin: left top;
+        }
+        
+        .floating-label input:focus,
+        .floating-label textarea:focus,
+        .floating-label select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+        
+        .floating-label input:focus + label,
+        .floating-label textarea:focus + label,
+        .floating-label select:focus + label,
+        .floating-label input:not(:placeholder-shown) + label,
+        .floating-label textarea:not(:placeholder-shown) + label,
+        .floating-label select:not(:placeholder-shown) + label {
+            top: 0.5rem;
+            left: 0.75rem;
+            font-size: 0.75rem;
+            color: #60a5fa;
+            transform: scale(0.9);
+        }
+        
+        .status-indicator {
+            position: relative;
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-online {
+            background-color: #10b981;
+        }
+        
+        .status-online::after {
+            border: 2px solid #10b981;
+        }
+        
+        .status-offline {
+            background-color: #dc2626;
+        }
+        
+        .status-offline::after {
+            border: 2px solid #dc2626;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.7;
+            }
+            70% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        .current-flow-line {
+            position: fixed;
+            top: 0;
+            left: 10%;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #2563eb, transparent);
+            z-index: 0;
+            opacity: 0.7;
+        }
+        
+        .current-flow-dot {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background-color: #dc2626;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #dc2626;
+            animation: flow 8s linear infinite;
+        }
+        
+        @keyframes flow {
+            0% {
+                top: 0%;
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .clip-reveal {
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        
+        .clip-reveal.active {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding-bottom: 0.25rem;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2563eb, #dc2626);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.75rem;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #2563eb, #dc2626, transparent);
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG Current Flow Line -->
+    <div class="current-flow-line">
+        <div class="current-flow-dot"></div>
+    </div>
+    
+    <!-- Background Elements -->
+    <div class="bg-blueprint"></div>
+    <div class="circuit-lines"></div>
+    
+    <!-- Navigation -->
+    <nav class="glass-card fixed top-6 left-1/2 transform -translate-x-1/2 w-11/12 max-w-6xl z-50">
+        <div class="flex justify-between items-center p-5 md:p-6">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#2563eb] to-[#dc2626] flex items-center justify-center mr-3">
+                    <span class="text-white font-bold text-xl">CE</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight">CHITRA <span class="text-[#2563eb]">ENTERPRISES</span></span>
+            </div>
+            
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="index.html" class="nav-link py-1">Legacy</a>
+                <a href="about.html" class="nav-link py-1">Technical Prowess</a>
+                <a href="products.html" class="nav-link py-1">Engineering Catalog</a>
+                <a href="services.html" class="nav-link py-1">Strategic Solutions</a>
+                <a href="contact.html" class="nav-link py-1 text-[#2563eb] font-semibold">Headquarters</a>
+            </div>
+            
+            <button class="magnetic-btn px-6 py-2.5 bg-gradient-to-r from-[#2563eb] to-[#1e40af] rounded-lg font-semibold hover:from-[#1e40af] hover:to-[#2563eb] transition-all duration-300 text-sm md:text-base">
+                Request Consultation
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
+        <!-- Hero Section -->
+        <section class="mb-20 scroll-reveal">
+            <div class="text-center mb-12 px-4">
+                <h1 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight">
+                    <span class="text-white block mb-2">THE</span> 
+                    <span class="text-[#2563eb] block">HEADQUARTERS</span>
+                </h1>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                    Where 25 years of TANGEDCO legacy meets cutting-edge electrical engineering. Our dual offices serve as command centers for industrial excellence across Tamil Nadu.
+                </p>
+            </div>
+            
+            <!-- Live Status Banner -->
+            <div class="glass-card-highlight p-6 md:p-8 mb-16">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <div class="status-indicator status-online mr-3"></div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Operational Status: <span class="text-[#10b981]">ALL SYSTEMS ACTIVE</span></h3>
+                            <p class="text-slate-400 text-sm">Last updated: Today, 09:45 AM</p>
+                        </div>
+                    </div>
+                    <div class="text-center md:text-right mt-2 md:mt-0">
+                        <p class="text-slate-300 mb-1">Response Time: <span class="text-[#60a5fa] font-semibold">Under 2 Hours</span></p>
+                        <p class="text-slate-400 text-sm">Emergency hotline: 24/7 operational</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Dual Office Display -->
+        <section class="mb-20">
+            <h2 class="section-title text-3xl font-bold mb-12 clip-reveal">Strategic Command Centers</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+                <!-- Chennai HQ -->
+                <div class="glass-card p-6 md:p-8 scroll-reveal flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <div class="status-indicator status-online mr-3"></div>
+                                <h3 class="text-2xl font-bold">Chennai Headquarters</h3>
+                            </div>
+                            <p class="text-slate-400">Primary Command & Technical Hub</p>
+                        </div>
+                        <span class="px-4 py-1 bg-[#dc2626]/20 text-[#dc2626] rounded-full text-sm font-semibold ml-4 flex-shrink-0">FLAGSHIP</span>
+                    </div>
+                    
+                    <div class="space-y-6 flex-grow">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#2563eb]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2563eb]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#60a5fa]">Location</h4>
+                                <p class="text-slate-300 leading-relaxed">Industrial Complex, Guindy<br>Chennai - 600032, Tamil Nadu</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#2563eb]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2563eb]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#60a5fa]">Operational Hours</h4>
+                                <p class="text-slate-300 leading-relaxed">Monday - Saturday: 8:30 AM - 8:30 PM<br>Sunday: Emergency Services Only</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#2563eb]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2563eb]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#60a5fa]">Direct Contact</h4>
+                                <p class="text-slate-300 leading-relaxed">+91 44 2234 5678<br>+91 98765 43210 (Emergency)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#2563eb]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2563eb]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#60a5fa]">Facilities</h4>
+                                <p class="text-slate-300 leading-relaxed">• 10,000 sq.ft Technical Workshop<br>• Advanced Testing Laboratory<br>• Client Demonstration Area<br>• Engineer Training Facility</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trichy Regional Office -->
+                <div class="glass-card p-6 md:p-8 scroll-reveal flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <div class="status-indicator status-online mr-3"></div>
+                                <h3 class="text-2xl font-bold">Trichy Regional Office</h3>
+                            </div>
+                            <p class="text-slate-400">Central Tamil Nadu Operations Hub</p>
+                        </div>
+                        <span class="px-4 py-1 bg-[#2563eb]/20 text-[#2563eb] rounded-full text-sm font-semibold ml-4 flex-shrink-0">REGIONAL</span>
+                    </div>
+                    
+                    <div class="space-y-6 flex-grow">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#dc2626]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#f87171]">Location</h4>
+                                <p class="text-slate-300 leading-relaxed">Industrial Estate, Thiruverumbur<br>Trichy - 620013, Tamil Nadu</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#dc2626]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#f87171]">Operational Hours</h4>
+                                <p class="text-slate-300 leading-relaxed">Monday - Saturday: 9:00 AM - 7:00 PM<br>On-call Engineer: 24/7</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#dc2626]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#f87171]">Direct Contact</h4>
+                                <p class="text-slate-300 leading-relaxed">+91 431 245 6789<br>+91 98765 12340 (Field Operations)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#dc2626]/20 flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1 text-[#f87171]">Specializations</h4>
+                                <p class="text-slate-300 leading-relaxed">• Agricultural & Industrial Power Solutions<br>• Rural Electrification Projects<br>• Solar Integration Units<br>• Field Service Deployment Center</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Luxury Contact Form -->
+        <section class="mb-20">
+            <h2 class="section-title text-3xl font-bold mb-12 clip-reveal">Strategic Consultation Request</h2>
+            
+            <div class="glass-card-highlight p-6 md:p-10 lg:p-12">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                    <div class="lg:col-span-2">
+                        <form id="contactForm" class="space-y-6 md:space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                <div class="floating-label">
+                                    <input type="text" id="firstName" placeholder=" " required>
+                                    <label for="firstName">First Name</label>
+                                </div>
+                                
+                                <div class="floating-label">
+                                    <input type="text" id="lastName" placeholder=" " required>
+                                    <label for="lastName">Last Name</label>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                <div class="floating-label">
+                                    <input type="email" id="email" placeholder=" " required>
+                                    <label for="email">Business Email</label>
+                                </div>
+                                
+                                <div class="floating-label">
+                                    <input type="tel" id="phone" placeholder=" ">
+                                    <label for="phone">Contact Number</label>
+                                </div>
+                            </div>
+                            
+                            <div class="floating-label">
+                                <input type="text" id="company" placeholder=" " required>
+                                <label for="company">Company/Organization</label>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                <div class="floating-label">
+                                    <select id="service" required>
+                                        <option value="" selected disabled></option>
+                                        <option value="consulting">Strategic Consulting</option>
+                                        <option value="tneb">TNEB Liaisoning</option>
+                                        <option value="solar">Solar Integration</option>
+                                        <option value="panels">Distribution Panels</option>
+                                        <option value="apfc">APFC Systems</option>
+                                        <option value="wiring">Industrial Wiring</option>
+                                        <option value="other">Other Requirements</option>
+                                    </select>
+                                    <label for="service">Service Required</label>
+                                </div>
+                                
+                                <div class="floating-label">
+                                    <select id="urgency" required>
+                                        <option value="" selected disabled></option>
+                                        <option value="urgent">Urgent (Within 48 Hours)</option>
+                                        <option value="week">This Week</option>
+                                        <option value="month">This Month</option>
+                                        <option value="planning">Planning Phase</option>
+                                    </select>
+                                    <label for="urgency">Project Urgency</label>
+                                </div>
+                            </div>
+                            
+                            <div class="floating-label">
+                                <textarea id="message" placeholder=" " rows="4"></textarea>
+                                <label for="message">Project Details / Requirements</label>
+                            </div>
+                            
+                            <div class="flex items-start md:items-center">
+                                <input type="checkbox" id="consent" class="w-5 h-5 mr-3 accent-[#2563eb] mt-1 md:mt-0 flex-shrink-0" required>
+                                <label for="consent" class="text-slate-300 text-sm md:text-base">
+                                    I consent to Chitra Enterprises contacting me regarding my inquiry and acknowledge the collection of my data as per privacy policy.
+                                </label>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                                <button type="submit" class="magnetic-btn px-8 py-3.5 md:px-10 md:py-4 bg-gradient-to-r from-[#2563eb] to-[#1e40af] rounded-lg font-semibold text-base md:text-lg hover:from-[#1e40af] hover:to-[#2563eb] transition-all duration-300 flex-1">
+                                    Submit Strategic Request
+                                </button>
+                                
+                                <button type="reset" class="px-8 py-3.5 md:px-10 md:py-4 border border-[#2563eb] text-[#2563eb] rounded-lg font-semibold text-base md:text-lg hover:bg-[#2563eb]/10 transition-all duration-300">
+                                    Clear Form
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Success Message (Hidden by Default) -->
+                        <div id="successMessage" class="hidden mt-8 p-6 bg-gradient-to-r from-[#10b981]/20 to-[#10b981]/10 border border-[#10b981]/30 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-[#10b981]/30 flex items-center justify-center mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-[#10b981]">Strategic Request Submitted</h3>
+                                    <p class="text-slate-300">Our engineering team will contact you within 2 business hours. For urgent matters, call our emergency hotline: +91 98765 43210</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Sidebar -->
+                    <div class="space-y-6 md:space-y-8">
+                        <div class="glass-card p-5 md:p-6">
+                            <h3 class="text-xl font-bold mb-4 text-[#2563eb]">Why Our Consultation?</h3>
+                            <ul class="space-y-3 text-slate-300">
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626] mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-sm md:text-base">Direct access to Er. S. Mani's 25-year TANGEDCO expertise</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626] mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-sm md:text-base">Complimentary initial technical assessment</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626] mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-sm md:text-base">TNEB compliance guarantee on all projects</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#dc2626] mr-3 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-sm md:text-base">Customized solutions for industrial/commercial scale</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="glass-card p-5 md:p-6">
+                            <h3 class="text-xl font-bold mb-4 text-[#dc2626]">Response Protocol</h3>
+                            <div class="space-y-3 md:space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-slate-400 text-sm md:text-base">Initial Contact</span>
+                                    <span class="font-semibold text-[#10b981] text-sm md:text-base">≤ 2 Hours</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-slate-400 text-sm md:text-base">Technical Proposal</span>
+                                    <span class="font-semibold text-[#60a5fa] text-sm md:text-base">24-48 Hours</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-slate-400 text-sm md:text-base">Site Assessment</span>
+                                    <span class="font-semibold text-[#f59e0b] text-sm md:text-base">As Requested</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-slate-400 text-sm md:text-base">Project Timeline</span>
+                                    <span class="font-semibold text-[#dc2626] text-sm md:text-base">Custom Quote</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center p-5 md:p-6 border border-[#2563eb]/30 rounded-lg">
+                            <h4 class="font-bold mb-2">Emergency Services</h4>
+                            <p class="text-slate-400 text-xs md:text-sm mb-3">24/7 Industrial Power Crisis Response</p>
+                            <a href="tel:+919876543210" class="text-[#dc2626] font-bold text-lg md:text-xl hover:text-[#b91c1c] transition-colors">+91 98765 43210</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Map & Directions -->
+        <section class="mb-20">
+            <h2 class="section-title text-3xl font-bold mb-12 clip-reveal">Strategic Locations</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+                <div class="glass-card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold mb-6">Chennai HQ Access</h3>
+                    <div class="space-y-3 md:space-y-4 text-slate-300">
+                        <p class="flex items-start"><span class="font-semibold text-[#2563eb] min-w-24">By Air:</span><span class="ml-2">8 km from Chennai International Airport (20-25 min drive)</span></p>
+                        <p class="flex items-start"><span class="font-semibold text-[#2563eb] min-w-24">By Rail:</span><span class="ml-2">4 km from Guindy Railway Station (10 min drive)</span></p>
+                        <p class="flex items-start"><span class="font-semibold text-[#2563eb] min-w-24">Metro:</span><span class="ml-2">800m from Guindy Metro Station (Walking distance)</span></p>
+                        <p class="flex items-start"><span class="font-semibold text-[#2563eb] min-w-24">Parking:</span><span class="ml-2">Secure underground parking for 30+ vehicles</span></p>
+                    </div>
+                    
+                    <div class="mt-8 p-4 bg-[#020617] border border-[#2563eb]/20 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <div class="w-6 h-6 rounded-full bg-[#dc2626] flex items-center justify-center mr-2 flex-shrink-0">
+                                <span class="text-white text-xs font-bold">A</span>
+                            </div>
+                            <span class="font-semibold">Nearest Major Landmark</span>
+                        </div>
+                        <p class="text-slate-400 text-sm md:text-base">Guindy Industrial Estate (Opposite), IIT Madras Research Park (1.2 km)</p>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold mb-6">Trichy Office Access</h3>
+                    <div class="space-y-3 md:space-y-4 text-slate-300">
+                        <p class="flex items-start"><span class="font-semibold text-[#dc2626] min-w-24">By Air:</span><span class="ml-2">12 km from Tiruchirappalli Airport (25-30 min drive)</span></p>
+                        <p class="flex items-start"><span class="font-semibold text-[#dc2626] min-w-24">By Rail:</span><span class="ml-2">7 km from Trichy Junction (15-20 min drive)</span></p>
+                        <p class="flex items-start"><span class="font-semibold text-[#dc2626] min-w-24">Highway:</span><span class="ml-2">Direct access from NH 38 (2 km)</span></p>
+                        <p class="flex items-start"><span class="font-semibold text-[#dc2626] min-w-24">Parking:</span><span class="ml-2">Industrial compound parking for 20+ vehicles</span></p>
+                    </div>
+                    
+                    <div class="mt-8 p-4 bg-[#020617] border border-[#dc2626]/20 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <div class="w-6 h-6 rounded-full bg-[#2563eb] flex items-center justify-center mr-2 flex-shrink-0">
+                                <span class="text-white text-xs font-bold">B</span>
+                            </div>
+                            <span class="font-semibold">Nearest Major Landmark</span>
+                        </div>
+                        <p class="text-slate-400 text-sm md:text-base">BHEL Trichy Complex (Adjacent), Trichy Industrial Growth Center (3 km)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer CTA -->
+        <section class="text-center">
+            <div class="glass-card-highlight p-8 md:p-10 lg:p-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Power Your Vision?</h2>
+                <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 md:mb-10 leading-relaxed">
+                    With 25 years of TANGEDCO authority and industrial-grade engineering precision, we transform electrical challenges into strategic advantages.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 md:gap-6">
+                    <button class="magnetic-btn px-8 py-3.5 md:px-10 md:py-4 bg-gradient-to-r from-[#2563eb] to-[#1e40af] rounded-lg font-semibold text-base md:text-lg hover:from-[#1e40af] hover:to-[#2563eb] transition-all duration-300">
+                        Schedule On-site Assessment
+                    </button>
+                    <a href="tel:+919876543210" class="px-8 py-3.5 md:px-10 md:py-4 border border-[#dc2626] text-[#dc2626] rounded-lg font-semibold text-base md:text-lg hover:bg-[#dc2626]/10 transition-all duration-300">
+                        Emergency Hotline
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="mt-20 pt-12 pb-8 border-t border-[#2563eb]/20">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#2563eb] to-[#dc2626] flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-xl">CE</span>
+                        </div>
+                        <span class="text-xl font-bold">CHITRA <span class="text-[#2563eb]">ENTERPRISES</span></span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Industrial Electrical Engineering & Power Solutions since 1999.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Navigation</h4>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="index.html" class="hover:text-[#2563eb] transition-colors">The Legacy</a></li>
+                        <li><a href="about.html" class="hover:text-[#2563eb] transition-colors">Technical Prowess</a></li>
+                        <li><a href="products.html" class="hover:text-[#2563eb] transition-colors">Engineering Catalog</a></li>
+                        <li><a href="services.html" class="hover:text-[#2563eb] transition-colors">Strategic Solutions</a></li>
+                        <li><a href="contact.html" class="hover:text-[#2563eb] transition-colors">Headquarters</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Certifications</h4>
+                    <ul class="space-y-2 text-slate-400">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-[#2563eb] rounded-full mr-2"></span>
+                            ISO 9001:2015 Certified
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-[#2563eb] rounded-full mr-2"></span>
+                            TANGEDCO Authorized Partner
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-[#2563eb] rounded-full mr-2"></span>
+                            IEI Recognized Engineers
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-[#2563eb] rounded-full mr-2"></span>
+                            25+ Years Industry Legacy
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Legal</h4>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#" class="hover:text-[#2563eb] transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-[#2563eb] transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-[#2563eb] transition-colors">Project Confidentiality</a></li>
+                        <li><a href="#" class="hover:text-[#2563eb] transition-colors">Compliance Documents</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-[#2563eb]/20 pt-8 text-center text-slate-500 text-sm">
+                <p>© 2024 Chitra Enterprises. All rights reserved. | Powering Industry with 25 Years of TANGEDCO Authority</p>
+                <p class="mt-2">Designed as a Digital Blueprint — Precision in Every Connection</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Magnetic Button Effect
+        document.addEventListener('DOMContentLoaded', function() {
+            // Magnetic buttons
+            const magneticButtons = document.querySelectorAll('.magnetic-btn');
+            
+            magneticButtons.forEach(button => {
+                button.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const deltaX = (x - centerX) / centerX;
+                    const deltaY = (y - centerY) / centerY;
+                    
+                    const strength = 15;
+                    
+                    this.style.transform = `translate(${deltaX * strength}px, ${deltaY * strength}px)`;
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translate(0, 0)';
+                });
+            });
+            
+            // Scroll reveal animations
+            const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+            const clipRevealElements = document.querySelectorAll('.clip-reveal');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const scrollObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+            
+            scrollRevealElements.forEach(el => scrollObserver.observe(el));
+            clipRevealElements.forEach(el => scrollObserver.observe(el));
+            
+            // Contact form submission
+            const contactForm = document.getElementById('contactForm');
+            const successMessage = document.getElementById('successMessage');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Simulate form submission
+                    setTimeout(() => {
+                        contactForm.reset();
+                        successMessage.classList.remove('hidden');
+                        
+                        // Hide success message after 8 seconds
+                        setTimeout(() => {
+                            successMessage.classList.add('hidden');
+                        }, 8000);
+                    }, 1000);
+                });
+            }
+            
+            // Floating labels enhancement
+            const floatLabels = document.querySelectorAll('.floating-label input, .floating-label textarea, .floating-label select');
+            
+            floatLabels.forEach(input => {
+                // Check if already has value on page load
+                if (input.value.trim() !== '') {
+                    input.dispatchEvent(new Event('input'));
+                }
+                
+                input.addEventListener('input', function() {
+                    const label = this.parentElement.querySelector('label');
+                    if (this.value.trim() !== '') {
+                        label.style.top = '0.25rem';
+                        label.style.left = '0.75rem';
+                        label.style.fontSize = '0.75rem';
+                        label.style.color = '#60a5fa';
+                    } else {
+                        label.style.top = '1rem';
+                        label.style.left = '1rem';
+                        label.style.fontSize = '1rem';
+                        label.style.color = '#94a3b8';
+                    }
+                });
+            });
+            
+            // Animate current flow line on scroll
+            const currentFlowDot = document.querySelector('.current-flow-dot');
+            window.addEventListener('scroll', function() {
+                const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+                if (currentFlowDot) {
+                    currentFlowDot.style.top = `${scrollPercentage}%`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

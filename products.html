@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="logo.png">
+
+    <title>Engineering Catalog | Chitra Enterprises</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian: #020617;
+            --cobalt: #2563eb;
+            --crimson: #dc2626;
+            --silver: #e5e7eb;
+            --grid-color: rgba(37, 99, 235, 0.03);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--obsidian);
+            color: var(--silver);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .space-grotesk {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        /* SVG Current Flow Line */
+        #current-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .flow-path {
+            stroke: var(--cobalt);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-dasharray: 10;
+            stroke-dashoffset: 1000;
+            animation: flow 30s linear infinite;
+        }
+        
+        @keyframes flow {
+            0% {
+                stroke-dashoffset: 1000;
+            }
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        /* Grid Background */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+        
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 24px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+        }
+        
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo span {
+            color: var(--cobalt);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+        
+        .nav-links a {
+            color: var(--silver);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 8px 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--cobalt);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Page Hero */
+        .page-hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+        
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--silver) 0%, var(--cobalt) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            max-width: 800px;
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+        }
+        
+        /* Product Grid */
+        .product-section {
+            padding: 80px 5%;
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+            text-align: center;
+            color: white;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .product-card {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+            cursor: pointer;
+        }
+        
+        .product-card.expanded {
+            height: 550px;
+            grid-column: span 1;
+        }
+        
+        .product-card-header {
+            padding: 30px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .product-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--crimson);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .product-card-content {
+            padding: 0 30px;
+            height: 220px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+        
+        .product-card.expanded .product-card-content {
+            opacity: 1;
+            transform: translateY(0);
+            height: 320px;
+        }
+        
+        .spec-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .spec-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+        
+        .spec-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--cobalt);
+        }
+        
+        .expand-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card.expanded .expand-indicator {
+            transform: rotate(180deg);
+        }
+        
+        /* Technical Spec Sheet */
+        .spec-sheet {
+            margin-top: 80px;
+            padding: 60px 5%;
+            background: rgba(2, 6, 23, 0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+        
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .spec-item {
+            padding: 25px;
+            border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+        }
+        
+        .spec-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--cobalt);
+            margin-bottom: 10px;
+        }
+        
+        .spec-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 60px 5%;
+            border-top: 1px solid rgba(37, 99, 235, 0.2);
+            margin-top: 80px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+        
+        .footer-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(229, 231, 235, 0.6);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .page-title {
+                font-size: 3rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .product-card.expanded {
+                height: 600px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        /* Desktop-la menu button-ah maraikalam */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+}
+
+.menu-toggle .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: white; /* Line color */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Mobile View (768px kulla) */
+@media screen and (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Phone-la menu button theriyum */
+    }
+
+    .nav-links {
+        display: none; /* Default-ah links-ah maraichiduvom */
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 70px; /* Header height-ku yethapadi mathunga */
+        left: 0;
+        background-color: #050a18; /* Unga blue background color */
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    /* JavaScript click panna indha class open aagum */
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: 15px;
+        width: 100%;
+    }
+}
+
+
+/* Image Container styling */
+.product-image-container {
+    width: 100%;
+    height: 180px; /* Image height adjustment */
+    margin-top: 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03); /* Glassy background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image-container img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain; /* Image ratio maarama iruka */
+    transition: transform 0.4s ease;
+}
+
+/* Hover effect */
+.product-card:hover .product-image-container img {
+    transform: scale(1.1);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Card Container */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    
+    /* Content-ah onnu keezha onnu veikka Flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Items-ah mela irundhu start pannum */
+    
+    min-height: 500px; /* Card-ku oru minimum height kudukkavum */
+    height: auto; 
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+/* Text Section (Icon, Title, Desc) */
+.product-card-header {
+    width: 100%;
+    margin-bottom: 20px; /* Image-kum text-kum naduvula space */
+    flex-shrink: 0; /* Text section surungama iruka */
+}
+
+.product-title {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    line-height: 1.2;
+}
+
+/* Image Box - Idhu dhaan overlay aagaama thadukkum */
+.product-image-box {
+    width: 100%;
+    height: 250px; /* Image height-ah fix panrom */
+    background: #fff; /* Unga images white background-la irukuradhala idhu set aagum */
+    border-radius: 15px;
+    margin-top: auto; /* Content koraiva irundha image-ah auto-va bottom-ku thallum */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-image-box img {
+    width: 100%;
+    height: 100%;
+    /* 'contain' use panna industrial products full-ah theriyum, ratio-vum maaraadhu */
+    object-fit: contain; 
+    padding: 10px; /* Image box border-la ottama iruka */
+}
+    </style>
+</head>
+<body>
+    <!-- SVG Current Flow -->
+    <svg id="current-flow" xmlns="http://www.w3.org/2000/svg">
+        <path class="flow-path" d="M-100,100 Q200,50 500,150 T1000,100 Q1200,200 1400,50 T1800,150 Q2000,100 2200,200" />
+        <path class="flow-path" d="M-100,300 Q300,250 600,350 T1100,300 Q1300,400 1500,250 T1900,350 Q2100,300 2300,400" />
+    </svg>
+    
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+    
+    <!-- Header -->
+  <header>
+    <div class="logo">
+        <img src="logo.png" class="logo-img">
+<div class="logo-text">CHITRA ENTERPRISES</div>    </div>
+    
+    <!-- Indha div dhaan andha moonu kodu icon -->
+    <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="products.html">Catalog</a>
+        <a href="services.html">Services</a>
+    </nav>
+</header>
+
+    <style>.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Logo image-kum text-kum naduvula gap */
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 45px; /* Logo size-ah inge adjust pannikalam */
+    width: auto;
+    /* Optional: Logo white background-oda irundha light-ah round panna */
+    border-radius: 50%; 
+}
+
+.logo-text {
+    font-size: 1.9rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: white;
+}
+
+.logo-text span {
+    color: var(--cobalt); /* Blue color for ENTERPRISES */
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+    .logo-img {
+        height: 35px; /* Phone-la logo-va konjam chinna pannuvom */
+    }
+    .logo-text {
+        font-size: 1.1rem;
+    }
+}</style>
+</header>
+    
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div>
+            <h1 class="page-title">Engineering Catalog</h1>
+            <p class="page-subtitle">Precision-engineered electrical solutions built on 25 years of TANGEDCO institutional knowledge. Each product undergoes rigorous 5-stage testing protocol.</p>
+        </div>
+    </section>
+    
+   <!-- Product Grid Section -->
+    <section class="product-section">
+        <h2 class="section-title">The Engineering Portfolio</h2>
+        
+       <!-- Product Grid Section Update -->
+<div class="product-grid">
+    <!-- 1. Material Control Panel (Old Metering Solutions-ku badhila) -->
+    <div class="glass-card product-card">
+        <div class="product-card-header">
+            <div class="product-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/>
+                </svg>
+            </div>
+            <div class="product-category">Precision Control</div>
+            <h3 class="product-title">Material control panel</h3>
+        </div>
+        <div class="product-image-box">
+            <img src="images/meter.jpg" alt="Material Control Panel">
+        </div>
+    </div>
+
+    <!-- 2. AMF Panel (Title update) -->
+    <div class="glass-card product-card">
+        <div class="product-card-header">
+            <div class="product-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                </svg>
+            </div>
+            <div class="product-category">Power Backup</div>
+            <h3 class="product-title">Amf panel</h3>
+        </div>
+        <div class="product-image-box">
+            <img src="images/amf.jpg" alt="Amf panel">
+        </div>
+    </div>
+
+    <!-- 3. MCC and PLC Panel (New/Updated Title) -->
+    <div class="glass-card product-card">
+        <div class="product-card-header">
+            <div class="product-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="2"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                </svg>
+            </div>
+            <div class="product-category">Industrial Automation</div>
+            <h3 class="product-title">Mcc and plc panel</h3>
+        </div>
+        <div class="product-image-box">
+            <img src="images/plc.jpg" alt="Mcc and plc panel">
+        </div>
+    </div>
+
+    <!-- APFC Panels (Indha card irukatum, client delete panna sollala) -->
+    <div class="glass-card product-card">
+        <div class="product-card-header">
+            <div class="product-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="product-category">Power Quality</div>
+            <h3 class="product-title">APFC Panels</h3>
+        </div>
+        <div class="product-image-box">
+            <img src="images/apfc.jpg" alt="APFC Panels">
+        </div>
+    </div>
+</div>
+    </section>    
+        <!-- Technical Spec Sheet -->
+        <div class="spec-sheet">
+            <h2 class="section-title" style="text-align: left;">Technical Specifications Summary</h2>
+            <p style="max-width: 800px; margin-bottom: 40px; opacity: 0.8;">All products manufactured in compliance with IS/IEC standards and undergo 5-stage quality testing protocol. Custom configurations available based on project requirements.</p>
+            
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <div class="spec-label">Standards Compliance</div>
+                    <div class="spec-value">IS/IEC 61439</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Environmental Rating</div>
+                    <div class="spec-value">IP54 Minimum</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Operating Temperature</div>
+                    <div class="spec-value">-5°C to 55°C</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Relative Humidity</div>
+                    <div class="spec-value">Up to 95% non-condensing</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Dielectric Withstand</div>
+                    <div class="spec-value">2500V AC for 1 minute</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Short Circuit Rating</div>
+                    <div class="spec-value">Up to 50kA</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Busbar Material</div>
+                    <div class="spec-value">Electro-tinned Copper</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Warranty Period</div>
+                    <div class="spec-value">24 Months</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 60px; padding: 30px; background: rgba(37, 99, 235, 0.05); border-radius: 12px;">
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 20px; color: white;">Custom Engineering Solutions</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                    Beyond standard catalog items, we specialize in custom-engineered solutions for unique applications. Our design team conducts detailed load studies, short circuit analysis, and coordination studies to deliver optimized panel designs.
+                </p>
+                <p style="font-size: 1.1rem;">
+                    Each custom solution includes complete documentation: single-line diagrams, GA drawings, bill of materials, and test certificates for regulatory compliance.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-title">Chitra Enterprises</div>
+                <p style="opacity: 0.7; margin-bottom: 20px;">Powering India with 25 years of expertise and precision engineering solutions.</p>
+                <div style="display: flex; gap: 15px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </div>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">Core Services</div>
+                <ul style="list-style: none; opacity: 0.7;">
+                    <li style="margin-bottom: 10px;">Electrical Control Panel Board</li>
+                    <li style="margin-bottom: 10px;">Electrical Consultancy</li>
+                    <li style="margin-bottom: 10px;">TNEB Liaisoning</li>
+                    <li style="margin-bottom: 10px;">Industrial Wiring, Cabeling and Installation</li>
+                    <li style="margin-bottom: 10px;">Solar Power Solutions</li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-title">Engineering Catalog</div>
+                <ul style="list-style: none; opacity: 0.7;">
+                    <li style="margin-bottom: 10px;">Metering panel</li>
+                    <li style="margin-bottom: 10px;">Machineries Control</li>
+                    <li style="margin-bottom: 10px;">APFC Panels</li>
+                    <li style="margin-bottom: 10px;">AMF Systems</li>
+                </ul>
+            </div>
+            <div>
+               <h3>Contact HQ</h3>
+
+<!-- Phone Section -->
+<div class="contact-item">
+    <i class="fas fa-phone-alt"></i>
+    <div class="contact-details">
+        <p class="phone-number">+91 98401 38827</p>
+        <p class="phone-number">+91 63812 40041</p>
+    </div>
+</div>
+
+<!-- Email Section -->
+<div class="contact-item">
+    <i class="fas fa-envelope"></i>
+    <div class="contact-details">
+        <p class="phone-number">chithramani2006@yahoo.co.in</p>
+        <p class="phone-number">chitrawebsitedomain@gmail.com</p>
+    </div>
+</div>
+<style>.phone-number {
+    font-weight: bold;
+    font-size: 18px;
+    color: #00ffcc;   /* Highlight color - change if needed */
+}
+</style>
+
+    <!-- Address Section -->
+    <div class="contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <div class="contact-details">
+            <p class="phone-number"><strong>Office 1:</strong> No. 8, 14th Cross St, New Colony, Chromepet, Chennai - 44.</p>
+            <p class="phone-number" style="margin-top: 12px;"><strong>Office 2:</strong> No. 75\7, Abdulkalam St, Nagalkeni, Chromepet, Chennai - 44.</p>
+        </div>
+    </div>
+</div>
+
+        <style>
+        
+        
+        .contact-info h3 {
+    margin-bottom: 25px;
+    font-size: 1.4rem;
+    color: white;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start; /* Icon-ah top-la veikka */
+    gap: 15px; /* Icon-kum text-kum naduvula space */
+    margin-bottom: 20px; /* Oru oru section-kum naduvula gap */
+}
+
+.contact-item i {
+    color: var(--cobalt); /* Blue color for icons */
+    font-size: 1.1rem;
+    margin-top: 4px; /* Text-oda align panna */
+}
+
+.contact-details p {
+    margin: 0;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+}
+
+.contact-details strong {
+    color: white; /* Office 1, Office 2 headings mattum bright-ah theriya */
+    display: block;
+    margin-bottom: 2px;
+}</style>
+        <div class="copyright">
+            © 2024 Chitra Enterprises. All rights reserved. | A legacy of 25 years TANGEDCO expertise.
+        </div>
+    </footer>
+    <script>
+        // Hover-to-Expand Product Cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const productCards = document.querySelectorAll('.product-card');
+            let activeCard = null;
+            
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // If there's an active card that's not this one, collapse it
+                    if (activeCard && activeCard !== this) {
+                        activeCard.classList.remove('expanded');
+                    }
+                    
+                    // Toggle the clicked card
+                    this.classList.toggle('expanded');
+                    
+                    // Update active card
+                    if (this.classList.contains('expanded')) {
+                        activeCard = this;
+                    } else {
+                        activeCard = null;
+                    }
+                });
+            });
+            
+            // Close card when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideCard = Array.from(productCards).some(card => 
+                    card.contains(event.target)
+                );
+                
+                if (!isClickInsideCard && activeCard) {
+                    activeCard.classList.remove('expanded');
+                    activeCard = null;
+                }
+            });
+            
+            // SVG Current Flow Scroll Animation
+            const flowPath = document.querySelectorAll('.flow-path');
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                flowPath.forEach(path => {
+                    path.style.strokeDashoffset = 1000 - (scrolled * 0.1);
+                });
+            });
+            
+            // Initialize first card as expanded on page load
+            setTimeout(() => {
+                const firstCard = document.getElementById('product-1');
+                if (firstCard) {
+                    firstCard.classList.add('expanded');
+                    activeCard = firstCard;
+                }
+            }, 1000);
+        });
+
+    const menu = document.querySelector('#mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+
+    menu.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        
+        // Menu click panna "X" mark-ah mara animation (Optional)
+        menu.classList.toggle('is-active');
+    });
+    </script>
+</body>
+</html>
